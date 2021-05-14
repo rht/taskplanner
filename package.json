@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "WCC-AC IT",
+  "author": "WCC AC IT",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.15.2",
