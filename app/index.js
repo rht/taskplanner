@@ -1,17 +1,16 @@
-const http = require('http');
+var http = require("http");
 
-const hostname = '127.0.0.1';
-const port = 3000;
+var hostname = '127.0.0.1';
+var port = 3000;
 
-const server = http.createServer((req, res) => {
+var server = http.createServer(function(req, res) {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+  res.end('Hello World').listen(8080);
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+server.listen(port, hostname);
+
 var bodyParser = require("body-parser"),
 express        = require("express"),
 axios          = require('axios'),
@@ -35,11 +34,8 @@ app.get("/getMessage", function(req, res){
         response = response.data;
         return res.send(response);
       })
-      .catch(function (error) {
-        console.log("get request to python server didn't work: " + error);
-      });
-})
+});
 
 app.listen(process.env.PORT || 3000, function(){
     console.log("Node.js HTTP server started on port 3000!");
-})
+});
