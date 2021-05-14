@@ -1,5 +1,0 @@
-*.DS_Store
-.ipynb_checkpoints
-*.pyc
-client_secret.json
-planning.md
