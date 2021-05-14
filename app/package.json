@@ -1,12 +1,13 @@
 {
-  "name": "Scheduling Assistant",
+  "name": "ampl",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
-  "author": "Juno Lee",
+  "author": "WCC AC IT",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.15.2",
