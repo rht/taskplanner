@@ -1,29 +1,13 @@
 {
-  "name": "ampl",
+  "name": "Scheduling Assistant",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "dependencies": {
-    "npm": "^6.14.13"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shutdownpagmaytime/taskplanner.git"
-  },
-  "keywords": [
-    "ampl",
-    "calendar"
-  ],
-  "author": "wcc-ac",
+  "author": "Juno Lee",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/shutdownpagmaytime/taskplanner/issues"
-  },
-  "homepage": "https://github.com/shutdownpagmaytime/taskplanner#readme"
   "dependencies": {
     "axios": "^0.15.2",
     "body-parser": "^1.15.2",
