@@ -9,4 +9,5 @@ httplib2
 google-api-python-client
 oauth2client
 scipy
+pandas
 scikit-learn==0.19.1
