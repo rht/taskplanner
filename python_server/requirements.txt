@@ -7,3 +7,5 @@ recurrent
 spacy
 httplib2
 google-api-python-client
+oauth2client
+scikit-learn==0.19.1
