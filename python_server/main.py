@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from datetime import datetime, timedelta
 from recurrent import RecurringEvent
 from urllib.parse import urlparse
-from spacy.en import English
+from spacy.lang.en import English
 import pickle as pickle
 import pandas as pd
 import numpy as np
@@ -13,7 +13,7 @@ import random
 # Google Calendar API
 import httplib2
 import os
-from apiclient import discovery
+from googleapiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
@@ -135,8 +135,8 @@ if __name__ == '__main__':
     service = discovery.build('calendar', 'v3', http=http)
 
     print('unpickling model...')
-    with open("models/classifier.pkl") as f:
-        clf = pickle.load(f)
+    with open("models/classifier.pkl", "rb") as f:
+        clf = pickle.load(f, encoding="bytes")
 
     print('loading parser...')
     parser = English()
