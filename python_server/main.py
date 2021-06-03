@@ -1,11 +1,11 @@
 # coding: utf-8
-from http.server import BaseHTTPRequestHandler,HTTPServer
+from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from sklearn.feature_extraction.text import CountVectorizer
 from datetime import datetime, timedelta
 from recurrent import RecurringEvent
-from urllib.parse import urlparse
+from urlparse import urlparse
 from spacy.en import English
-import pickle as pickle
+import cPickle as pickle
 import pandas as pd
 import numpy as np
 import dateutil
@@ -13,7 +13,7 @@ import random
 # Google Calendar API
 import httplib2
 import os
-from googleapiclient import discovery
+from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
@@ -125,31 +125,31 @@ def get_credentials():
             credentials = tools.run_flow(flow, store, flags)
         else: # Needed only for compatibility with Python 2.6
             credentials = tools.run(flow, store)
-        print(('Storing credentials to ' + credential_path))
+        print('Storing credentials to ' + credential_path)
     return credentials
 
 if __name__ == '__main__':
-    print('loading credentials and authorizing client...')
+    print 'loading credentials and authorizing client...'
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
 
-    print('unpickling model...')
-    with open("models/classifier.pkl", "rb") as f:
-        clf = pickle.load(f, encoding="bytes")
+    print 'unpickling model...'
+    with open("models/classifier.pkl") as f:
+        clf = pickle.load(f)
 
-    print('loading parser...')
+    print 'loading parser...'
     parser = English()
 
     try:
     	#Create a web server and define the handler to manage the
     	#incoming request
     	server = HTTPServer(('', 8080), myHandler)
-    	print('Python HTTP server started on port 8080!')
+    	print 'Python HTTP server started on port 8080!'
 
     	#Wait forever for incoming http requests
     	server.serve_forever()
 
     except KeyboardInterrupt:
-    	print('Shutting down the web server')
+    	print 'Shutting down the web server'
     	server.socket.close()
