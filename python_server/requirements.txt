@@ -6,3 +6,4 @@ Sphinx==1.2.2
 recurrent
 spacy
 httplib2
+google-api-python-client
