@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from datetime import datetime, timedelta
 from recurrent import RecurringEvent
 from urllib.parse import urlparse
-from spacy.lang.en import English
+from spacy.en import English
 import pickle as pickle
 import pandas as pd
 import numpy as np
