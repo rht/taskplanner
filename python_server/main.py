@@ -117,12 +117,14 @@ class myHandler(BaseHTTPRequestHandler):
                 reply += 'No matching event'
         else: #query_events
             try:
+                now = datetime.now()
+                r = RecurringEvent(now_date=now)
                 dt = r.parse(msg)
+                print("query events:", msg, dt)
                 if "p.m." in msg and dt.hour < 12:
                     dt += timedelta(hours=12)
                 if "a.m." in msg and dt.hour > 12:
                     dt -= timedelta(hours=12)
-                print("query events:", msg, dt)
                 dt = timezone_denver.localize(dt)
                 timemin = dt.isoformat()
             except Exception:
