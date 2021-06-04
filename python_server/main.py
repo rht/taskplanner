@@ -97,6 +97,7 @@ class myHandler(BaseHTTPRequestHandler):
                         event = service.events().delete(calendarId='primary', eventId=eventid).execute()
                         print("DELETED!")
                         print(event)
+                        reply += 'Event successfully deleted!'
                         found = True
                         break
             if not found:
