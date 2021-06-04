@@ -17,12 +17,15 @@ from googleapiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
+import pytz
 
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 except ImportError:
     flags = None
+
+utc=pytz.UTC
 
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -88,10 +91,11 @@ class myHandler(BaseHTTPRequestHandler):
                 start = event['start']
                 if start.get('dateTime'):
                     dt_google = dateutil.parser.parse(start.get('dateTime'))
-                    if dt == dt_google:
+                    if dt.replace(tzinfo=utc) == dt_google.replace(tzinfo=utc):
                         print("FOUND!")
                         eventid = event['id']
                         event = service.events().delete(calendarId='primary', eventId=eventid).execute()
+                        print("DELETED!")
                         print(event)
                         found = True
                         break
