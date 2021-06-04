@@ -51,8 +51,12 @@ class myHandler(BaseHTTPRequestHandler):
         msg = '\''.join(msg.split('%27'))
         if ('delete' in msg) or ('cancel' in msg):
             intent = "delete_event"
+        elif ('?' in msg) or ("what" in msg.lower()):
+            intent = "query_events"
         else:
             intent = clf.predict([msg])[0]
+        print("msg:", msg)
+        print("intent:", intent)
         if intent == 'create_event':
             r = RecurringEvent(now_date=datetime.now())
             dt = r.parse(msg)
@@ -103,11 +107,9 @@ class myHandler(BaseHTTPRequestHandler):
                     dt_google = dateutil.parser.parse(start.get('dateTime'))
                     #print(dt, dt_google.replace(tzinfo=utc))
                     if dt == dt_google:
-                        print("FOUND!")
                         eventid = event['id']
                         event = service.events().delete(calendarId='primary', eventId=eventid).execute()
-                        print("DELETED!")
-                        print(event)
+                        print("deleted:", event)
                         reply += 'Event successfully deleted!'
                         found = True
                         break
