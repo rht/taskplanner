@@ -92,7 +92,7 @@ function reply(result = "{intent:'Unknown',reply:'Sorry, my service is currently
     $('<div class="message new">' + response + '</div>').appendTo($('.mCSB_container')).addClass('new');
     setDate();
     updateScrollbar();
-    if (result.intent == 'create_event') {
+    if (result.intent == 'create_event') || (result.intent == 'delete_event') {
         $('#calendar').attr('src', $('#calendar').attr('src'));
     }
     i++;
