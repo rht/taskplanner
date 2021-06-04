@@ -94,7 +94,6 @@ class myHandler(BaseHTTPRequestHandler):
                 if start.get('dateTime'):
                     dt_google = dateutil.parser.parse(start.get('dateTime'))
                     #print(dt, dt_google.replace(tzinfo=utc))
-                    print(dt, dt_google.replace(tzinfo=utc))
                     if dt == dt_google:
                         print("FOUND!")
                         eventid = event['id']
