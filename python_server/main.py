@@ -43,7 +43,10 @@ class myHandler(BaseHTTPRequestHandler):
         query_components = dict(qc.split("=") for qc in query.split("&"))
         msg = ' '.join(query_components["message"].split('%20'))
         msg = '\''.join(msg.split('%27'))
-        intent = clf.predict([msg])[0]
+        if ('delete' in msg) or ('cancel' in msg):
+            intent = "delete_event"
+        else:
+            intent = clf.predict([msg])[0]
         if intent == 'create_event':
             r = RecurringEvent(now_date=datetime.now())
             dt = r.parse(msg)
@@ -65,6 +68,35 @@ class myHandler(BaseHTTPRequestHandler):
             }
             event = service.events().insert(calendarId='primary', body=event).execute()
 
+        elif intent == 'delete_event':
+            now = datetime.now()
+            r = RecurringEvent(now_date=now)
+            dt = r.parse(msg)
+            if "p.m." in msg and dt.hour < 12:
+                dt += timedelta(hours=12)
+            if "a.m." in msg and dt.hour > 12:
+                dt -= timedelta(hours=12)
+            eventsResult = service.events().list(
+                calendarId='primary', timeMin=(now.isoformat() + 'Z'), maxResults=10, singleEvents=True,
+                orderBy='startTime').execute()
+            events = eventsResult.get('items', [])
+            reply = ''
+            if not events:
+                reply += 'No upcoming events found.'
+            found = False
+            for event in events:
+                start = event['start']
+                if start.get('dateTime'):
+                    dt_google = dateutil.parser.parse(start.get('dateTime'))
+                    if dt == dt_google:
+                        print("FOUND!")
+                        eventid = event['id']
+                        event = service.events().delete(calendarId='primary', eventId=eventid).execute()
+                        print(event)
+                        found = True
+                        break
+            if not found:
+                reply += 'No matching event'
         else: #query_events
             now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
             reply = 'Your Agenda:<br>'
