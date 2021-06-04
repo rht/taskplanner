@@ -80,7 +80,7 @@ class myHandler(BaseHTTPRequestHandler):
             if "a.m." in msg and dt.hour > 12:
                 dt -= timedelta(hours=12)
             eventsResult = service.events().list(
-                calendarId='primary', timeMin=(now.isoformat() + 'Z'), maxResults=30, singleEvents=True,
+                calendarId='primary', timeMin=(now.isoformat() + 'Z'), maxResults=50, singleEvents=True,
                 orderBy='startTime').execute()
             events = eventsResult.get('items', [])
             reply = ''
@@ -91,7 +91,8 @@ class myHandler(BaseHTTPRequestHandler):
                 start = event['start']
                 if start.get('dateTime'):
                     dt_google = dateutil.parser.parse(start.get('dateTime'))
-                    if dt.replace(tzinfo=utc) == dt_google.replace(tzinfo=utc):
+                    print(dt, dt_google.replace(tzinfo=utc))
+                    if dt == dt_google.replace(tzinfo=utc):
                         print("FOUND!")
                         eventid = event['id']
                         event = service.events().delete(calendarId='primary', eventId=eventid).execute()
