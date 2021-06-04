@@ -141,6 +141,7 @@ class myHandler(BaseHTTPRequestHandler):
                 start = event['start']
                 if start.get('dateTime'):
                     dt = dateutil.parser.parse(start.get('dateTime'))
+                    dt = timezone_denver.localize(dt)
                     hour = str(dt.hour) if dt.hour <= 12 and dt.hour > 0 else str(abs(dt.hour-12))
                     minute = str(dt.minute) if dt.minute > 9 else '0' + str(dt.minute)
                     meridiem_indicator = ' AM' if dt.hour < 12 else ' PM'
@@ -148,6 +149,7 @@ class myHandler(BaseHTTPRequestHandler):
                     time = hour + ':' + minute + meridiem_indicator
                 else:
                     dt = dateutil.parser.parse(start.get('date'))
+                    dt = timezone_denver.localize(dt)
                     date = dt.date()
                     time = 'All-Day'
                 reply += '<br>' + str(dt.month) + '/' + str(dt.day) + ' ' + time + ' ' + event['summary']
