@@ -51,7 +51,7 @@ class myHandler(BaseHTTPRequestHandler):
         msg = '\''.join(msg.split('%27'))
         if ('delete' in msg) or ('cancel' in msg):
             intent = "delete_event"
-        elif ('?' in msg) or ("what" in msg.lower()):
+        elif ("what" in msg.lower()):
             intent = "query_events"
         else:
             intent = clf.predict([msg])[0]
