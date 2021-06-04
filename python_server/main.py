@@ -116,10 +116,21 @@ class myHandler(BaseHTTPRequestHandler):
             if not found:
                 reply += 'No matching event'
         else: #query_events
-            now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+            try:
+                dt = r.parse(msg)
+                if "p.m." in msg and dt.hour < 12:
+                    dt += timedelta(hours=12)
+                if "a.m." in msg and dt.hour > 12:
+                    dt -= timedelta(hours=12)
+                print("query events:", msg, dt)
+                dt = timezone_denver.localize(dt)
+                timemin = dt.isoformat()
+            except Exception:
+                now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+                timemin = now
             reply = 'Your Agenda:<br>'
             eventsResult = service.events().list(
-                calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
+                calendarId='primary', timeMin=timemin, maxResults=10, singleEvents=True,
                 orderBy='startTime').execute()
             events = eventsResult.get('items', [])
             if not events:
