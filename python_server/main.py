@@ -68,8 +68,13 @@ class myHandler(BaseHTTPRequestHandler):
             if "a.m." in msg and dt.hour > 12:
                 dt -= timedelta(hours=12)
             reply = random.choice(create_replies)
+            try:
+                event_name = msg.split(' ')[4]
+            except Exception as e:
+                print(e)
+                event_name = 'Meeting'
             event = {
-              'summary': 'Meeting',
+              'summary': event_name,
               'start': {
                 'dateTime': dt.isoformat(),
                 'timeZone': 'America/Denver',
