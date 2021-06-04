@@ -35,6 +35,8 @@ APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 create_replies = ['Ok, just added that to your calendar!',
                   'Ok, scheduled that for you!']
 
+none_dt_msg = "I cannot understand your message"
+
 #This class will handles any incoming request from the browser
 class myHandler(BaseHTTPRequestHandler):
 
@@ -54,6 +56,9 @@ class myHandler(BaseHTTPRequestHandler):
         if intent == 'create_event':
             r = RecurringEvent(now_date=datetime.now())
             dt = r.parse(msg)
+            if dt is None:
+                self.wfile.write({"intent": intent, "reply": none_dt_msg})
+                return
             if "p.m." in msg and dt.hour < 12:
                 dt += timedelta(hours=12)
             if "a.m." in msg and dt.hour > 12:
@@ -76,6 +81,9 @@ class myHandler(BaseHTTPRequestHandler):
             now = datetime.now()
             r = RecurringEvent(now_date=now)
             dt = r.parse(msg)
+            if dt is None:
+                self.wfile.write({"intent": intent, "reply": none_dt_msg})
+                return
             if "p.m." in msg and dt.hour < 12:
                 dt += timedelta(hours=12)
             if "a.m." in msg and dt.hour > 12:
