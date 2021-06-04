@@ -25,7 +25,8 @@ try:
 except ImportError:
     flags = None
 
-utc=pytz.UTC
+utc = pytz.UTC
+timezone_denver = pytz.timezone('America/Denver')
 
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -79,6 +80,7 @@ class myHandler(BaseHTTPRequestHandler):
                 dt += timedelta(hours=12)
             if "a.m." in msg and dt.hour > 12:
                 dt -= timedelta(hours=12)
+            dt = timezone_denver.localize(dt)
             eventsResult = service.events().list(
                 calendarId='primary', timeMin=(now.isoformat() + 'Z'), maxResults=50, singleEvents=True,
                 orderBy='startTime').execute()
@@ -91,8 +93,9 @@ class myHandler(BaseHTTPRequestHandler):
                 start = event['start']
                 if start.get('dateTime'):
                     dt_google = dateutil.parser.parse(start.get('dateTime'))
+                    #print(dt, dt_google.replace(tzinfo=utc))
                     print(dt, dt_google.replace(tzinfo=utc))
-                    if dt == dt_google.replace(tzinfo=utc):
+                    if dt == dt_google:
                         print("FOUND!")
                         eventid = event['id']
                         event = service.events().delete(calendarId='primary', eventId=eventid).execute()
