@@ -80,7 +80,7 @@ class myHandler(BaseHTTPRequestHandler):
             if "a.m." in msg and dt.hour > 12:
                 dt -= timedelta(hours=12)
             eventsResult = service.events().list(
-                calendarId='primary', timeMin=(now.isoformat() + 'Z'), maxResults=10, singleEvents=True,
+                calendarId='primary', timeMin=(now.isoformat() + 'Z'), maxResults=30, singleEvents=True,
                 orderBy='startTime').execute()
             events = eventsResult.get('items', [])
             reply = ''
