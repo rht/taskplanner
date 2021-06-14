@@ -49,7 +49,7 @@ class myHandler(BaseHTTPRequestHandler):
         query_components = dict(qc.split("=") for qc in query.split("&"))
         msg = ' '.join(query_components["message"].split('%20'))
         msg = '\''.join(msg.split('%27'))
-        if ('delete' in msg) or ('cancel' in msg):
+        if ('delete' in msg.lower()) or ('cancel' in msg.lower()):
             intent = "delete_event"
         elif ("what" in msg.lower()):
             intent = "query_events"
