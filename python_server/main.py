@@ -18,6 +18,7 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 import pytz
+from dateutil import parser
 
 try:
     import argparse
@@ -49,6 +50,12 @@ class myHandler(BaseHTTPRequestHandler):
         query_components = dict(qc.split("=") for qc in query.split("&"))
         msg = ' '.join(query_components["message"].split('%20'))
         msg = '\''.join(msg.split('%27'))
+
+        is_special_meeting = False
+        if msg.startswith('action: !meeting(') and msg.endswith(')!'):
+            # The message is a special command
+            is_special_meeting = True
+
         if ('delete' in msg.lower()) or ('cancel' in msg.lower()):
             intent = "delete_event"
         elif ("what" in msg.lower()):
@@ -58,21 +65,35 @@ class myHandler(BaseHTTPRequestHandler):
         print("msg:", msg)
         print("intent:", intent)
         if intent == 'create_event':
-            r = RecurringEvent(now_date=datetime.now())
-            dt = r.parse(msg)
-            if dt is None:
-                self.wfile.write({"intent": intent, "reply": none_dt_msg})
-                return
-            if "p.m." in msg and dt.hour < 12:
-                dt += timedelta(hours=12)
-            if "a.m." in msg and dt.hour > 12:
-                dt -= timedelta(hours=12)
             reply = random.choice(create_replies)
-            try:
-                event_name = msg.split(' ')[4]
-            except Exception as e:
-                print(e)
-                event_name = 'Meeting'
+            if is_special_meeting:
+                _msg_body = msg.replace('action: !meeting(#')[:-2]
+                meeting_time, the_rest = _msg_body.split('#')
+                dt = parser.parse(meeting_time)
+                dt = dt.replace(hour=9)
+                participants = [p for p in the_rest.split(' ')]
+                for p in participants:
+                    if not (p.startswith("@") and p.endswith("@")):
+                        self.wfile.write(
+                            {"intent": intent,
+                             "reply": f"Sorry, participant {p} must be surrounded by @"})
+                participants = [p[1:-1] for p in participants]
+                event_name = "Meeting 9am with " + ','.join(participants)
+            else:
+                r = RecurringEvent(now_date=datetime.now())
+                dt = r.parse(msg)
+                if dt is None:
+                    self.wfile.write({"intent": intent, "reply": none_dt_msg})
+                    return
+                if "p.m." in msg and dt.hour < 12:
+                    dt += timedelta(hours=12)
+                if "a.m." in msg and dt.hour > 12:
+                    dt -= timedelta(hours=12)
+                try:
+                    event_name = msg.split(' ')[4]
+                except Exception as e:
+                    print(e)
+                    event_name = 'Meeting'
             event = {
               'summary': event_name,
               'start': {
