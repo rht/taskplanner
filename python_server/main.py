@@ -72,7 +72,7 @@ class myHandler(BaseHTTPRequestHandler):
                 the_rest = split_by_space[1:]
                 dt = dateutil.parser.parse(meeting_time)
                 dt = dt.replace(hour=9)
-                participants = [p for p in the_rest.split(' ')]
+                participants = [p for p in the_rest]
                 for p in participants:
                     if not (p.startswith("@") and p.endswith("@")):
                         self.wfile.write(
