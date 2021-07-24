@@ -76,7 +76,7 @@ class myHandler(BaseHTTPRequestHandler):
                     if not (p.startswith("@") and p.endswith("@")):
                         self.wfile.write(
                             {"intent": intent,
-                             "reply": f"Sorry, participant {p} must be surrounded by @"})
+                             "reply": "Sorry, participant %s must be surrounded by @" % p})
                 participants = [p[1:-1] for p in participants]
                 event_name = "Meeting 9am with " + ','.join(participants)
             else:
