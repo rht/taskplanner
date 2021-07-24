@@ -18,7 +18,6 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 import pytz
-from dateutil import parser
 
 try:
     import argparse
@@ -71,7 +70,7 @@ class myHandler(BaseHTTPRequestHandler):
                 split_by_space = _msg_body.split(' ')
                 meeting_time = split_by_space[0]
                 the_rest = split_by_space[1:]
-                dt = parser.parse(meeting_time)
+                dt = dateutil.parser.parse(meeting_time)
                 dt = dt.replace(hour=9)
                 participants = [p for p in the_rest.split(' ')]
                 for p in participants:
