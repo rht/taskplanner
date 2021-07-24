@@ -67,7 +67,7 @@ class myHandler(BaseHTTPRequestHandler):
         if intent == 'create_event':
             reply = random.choice(create_replies)
             if is_special_meeting:
-                _msg_body = msg.replace('action: !meeting(#', '')[:-2]
+                _msg_body = msg.replace('action: !meeting(', '')[:-2]
                 split_by_space = _msg_body.split(' ')
                 meeting_time = split_by_space[0]
                 the_rest = split_by_space[1:]
